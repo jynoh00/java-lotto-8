@@ -4,18 +4,18 @@ import camp.nextstep.edu.missionutils.Console;
 import lotto.common.InputMessage;
 
 public class InputView {
-    public String getUserPurchasePrice() {
-        System.out.print(InputMessage.INPUT_PURCHASE_PRICE_PROMPT.getMessage());
+    public String readUserPurchasePrice() {
+        System.out.println(InputMessage.INPUT_PURCHASE_PRICE_PROMPT.getMessage());
         return Console.readLine();
     }
 
-    public String getWinningNumbers() {
-        System.out.print(InputMessage.INPUT_WINNING_NUMBERS_PROMPT.getMessage());
+    public String readWinningNumbers() {
+        System.out.println(InputMessage.INPUT_WINNING_NUMBERS_PROMPT.getMessage());
         return Console.readLine();
     }
 
-    public String getBonusNumber() {
-        System.out.print(InputMessage.INPUT_BONUS_NUMBER_PROMPT.getMessage());
+    public String readBonusNumber() {
+        System.out.println(InputMessage.INPUT_BONUS_NUMBER_PROMPT.getMessage());
         return Console.readLine();
     }
 }
