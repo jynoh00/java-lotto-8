@@ -1,31 +1,32 @@
 package lotto.controller;
 
 import camp.nextstep.edu.missionutils.Console;
-import lotto.validator.InputValidator;
+import lotto.service.InputService;
+import lotto.service.LottoService;
+import lotto.model.Statistics;
+import lotto.model.LottoSimulator;
 import lotto.view.InputView;
 import lotto.view.OutputView;
+
 import java.util.List;
 
 public class LottoController {
     private final InputView inputView;
     private final OutputView outputView;
-
-    private static int purchasePrice;
-    private static int bonusNumber;
-    private static String beforeWinningNumbers;
-    private static List<Integer> winningNumbers;
+    private final InputService inputService;
+    private final LottoService lottoService;
 
     public LottoController() {
         this.inputView = new InputView();
         this.outputView = new OutputView();
+        this.inputService = new InputService();
+        this.lottoService = new LottoService();
     }
 
     public void run(){
         try{
-            userInput();
-            splitWinningNumbers();
-            // 로또 생성 -> 로또 일치 여부 확인 -> 결과값 얻기 구현
-            // Output 출력
+            LottoSimulator simulator = CreateLottoSimulator();
+            startSimulation(simulator);
         }catch(Exception e){
             System.out.println(e.getMessage());
             throw e;
@@ -34,20 +35,33 @@ public class LottoController {
         }
     }
 
-    private void userInput(){ // 입력값 담당 메서드
-        String tmpPurchasePrice = inputView.getUserPurchasePrice();
-        purchasePrice = InputValidator.PURCHASE_PRICE.validatePurchasePrice(tmpPurchasePrice);
+    private LottoSimulator CreateLottoSimulator() {
+        int purchasePrice = getPurchasePrice();
+        List<Integer> winningNumbers = getWinningNumbers();
+        int bonusNumber = getBonusNumber();
 
-        String tmpWinningNumbers = inputView.getWinningNumbers();
-        beforeWinningNumbers = InputValidator.WINNING_NUMBER.validateWinningNumbers(tmpWinningNumbers); // 전체 포맷 검증
-        // 스플릿 후 개별 검증 필요
-
-        String tmpBonusNumber = inputView.getBonusNumber();
-        bonusNumber = InputValidator.BONUS_NUMBER.validateBonusNumber(tmpBonusNumber);
+        return lottoService.createSimulator(purchasePrice, winningNumbers, bonusNumber);
     }
 
-    private void splitWinningNumbers() {
-        // beforeWinningNumbers 개별 스플릿 후 검증 메서드(LottoValidator) 호출
+    private int getPurchasePrice() {
+        String userPurChasePrice = inputView.readUserPurchasePrice();
+        return inputService.validateAndParsePurchasePrice(userPurChasePrice);
+    }
+
+    private List<Integer> getWinningNumbers() {
+        String userWinningNumbers = inputView.readWinningNumbers();
+        return inputService.validateAndParseWinningNumbers(userWinningNumbers);
+    }
+
+    private int getBonusNumber() {
+        String userBonusNumber = inputView.readBonusNumber();
+        return inputService.validateAndParseBonusNumber(userBonusNumber);
+    }
+
+    private void startSimulation(LottoSimulator simulator) {
+        outputView.displayPurchasedLottos(simulator.getPurchasedLottos());
+        Statistics statistics = lottoService.calculateStatistics(simulator);
+        outputView.displayStatistics(statistics);
     }
 }
 
