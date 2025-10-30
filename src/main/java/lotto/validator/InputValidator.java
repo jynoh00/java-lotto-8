@@ -3,6 +3,8 @@ package lotto.validator;
 import lotto.common.ErrorMessage;
 import lotto.common.LottoConstants;
 
+import java.util.List;
+
 public enum InputValidator {
     PURCHASE_PRICE {
         @Override
@@ -31,6 +33,13 @@ public enum InputValidator {
 
             return bonusNumber;
         }
+
+        @Override
+        public void validateRedundancy(int bonusNumber, List<Integer> winningNumbers) {
+            if (winningNumbers.contains(bonusNumber)) {
+                throw new IllegalArgumentException(ErrorMessage.BONUS_NUMBER_REDUNDANCY.getMessage());
+            }
+        }
     };
 
     public int validatePurchasePrice(int purchasePrice) {
@@ -42,6 +51,10 @@ public enum InputValidator {
     }
 
     public int validateBonusNumber(int bonusNumber) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void validateRedundancy(int bonusNumber, List<Integer> winningNumbers) {
         throw new UnsupportedOperationException();
     }
 
