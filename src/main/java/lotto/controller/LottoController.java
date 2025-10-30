@@ -59,7 +59,7 @@ public class LottoController {
     }
 
     private void startSimulation(LottoSimulator simulator) {
-        outputView.displayPurchasedLottos(simulator.getPurchasedLottos());
+        outputView.displayPurchasedLottos(simulator.getPurchaseCount(), simulator.getPurchasedLottos());
         Statistics statistics = lottoService.calculateStatistics(simulator);
         outputView.displayStatistics(statistics);
     }
