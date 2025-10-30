@@ -8,16 +8,16 @@ import lotto.model.LottoSimulator;
 import lotto.model.Rank;
 import lotto.model.Statistics;
 
-import java.util.Collections;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class LottoService {
-    public LottoSimulator createSimulator(int purchasePrice, List<Integer> winningNumbers, int bonusNumber) {
+    public LottoSimulator createSimulator(int purchasePrice) {
         int purchaseCount = getPurchaseCount(purchasePrice);
-
-        return new LottoSimulator(purchaseCount, winningNumbers, bonusNumber);
+        return new LottoSimulator(purchaseCount, makePurchasedLottos(purchaseCount));
     }
 
     public Statistics calculateStatistics(LottoSimulator simulator) {
@@ -51,7 +51,17 @@ public class LottoService {
         return count;
     }
 
-    public List<Integer> makeLottoNumbers() {
+    private List<Lotto> makePurchasedLottos(int purchaseCount) {
+        List<Lotto> purchasedLottos = new ArrayList<>();
+        for (int i = LottoConstants.ZERO.getValue(); i < purchaseCount; i++) {
+            List<Integer> numbers = makeLottoNumbers();
+            purchasedLottos.add(new Lotto(numbers));
+        }
+
+        return purchasedLottos;
+    }
+
+    private List<Integer> makeLottoNumbers() {
         List<Integer> lottoNumbers = Randoms.pickUniqueNumbersInRange(
                 LottoConstants.LOTTO_MIN_NUMBER.getValue(),
                 LottoConstants.LOTTO_MAX_NUMBER.getValue(),
