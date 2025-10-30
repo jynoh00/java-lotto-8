@@ -9,10 +9,12 @@ import java.util.List;
 
 public class OutputView {
     public void displayPurchasedLottos(int purchaseCount, List<Lotto> Lottos) {
+        System.out.println();
         System.out.println(OutputMessage.PURCHASE_COUNT.format(purchaseCount));
         for (Lotto lotto : Lottos) {
             System.out.println(lotto.getNumbers());
         }
+        System.out.println();
     }
 
     public void displayStatistics (Statistics statistics) {
