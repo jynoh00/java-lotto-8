@@ -1,6 +1,5 @@
 package lotto.controller;
 
-import camp.nextstep.edu.missionutils.Console;
 import lotto.service.InputService;
 import lotto.service.LottoService;
 import lotto.model.Statistics;
@@ -16,6 +15,8 @@ public class LottoController {
     private final InputService inputService;
     private final LottoService lottoService;
 
+    private LottoSimulator simulator;
+
     public LottoController() {
         this.inputView = new InputView();
         this.outputView = new OutputView();
@@ -25,22 +26,31 @@ public class LottoController {
 
     public void run(){
         try{
-            LottoSimulator simulator = CreateLottoSimulator();
-            startSimulation(simulator);
-        }catch(Exception e){
+            purchaseStage();
+            setStage();
+            statisticStage();
+        }catch(IllegalArgumentException | IllegalStateException e){
             System.out.println(e.getMessage());
-            throw e;
-        }finally{
-            Console.close();
         }
     }
 
-    private LottoSimulator CreateLottoSimulator() {
+    private void purchaseStage() {
         int purchasePrice = getPurchasePrice();
+        simulator = lottoService.createSimulator(purchasePrice);
+
+        outputView.displayPurchasedLottos(simulator.getPurchaseCount(), simulator.getPurchasedLottos());
+    }
+
+    private void setStage() {
         List<Integer> winningNumbers = getWinningNumbers();
         int bonusNumber = getBonusNumber();
 
-        return lottoService.createSimulator(purchasePrice, winningNumbers, bonusNumber);
+        simulator.setWinningInfo(winningNumbers, bonusNumber);
+    }
+
+    private void statisticStage() {
+        Statistics statistics = lottoService.calculateStatistics(simulator);
+        outputView.displayStatistics(statistics);
     }
 
     private int getPurchasePrice() {
@@ -57,14 +67,4 @@ public class LottoController {
         String userBonusNumber = inputView.readBonusNumber();
         return inputService.validateAndParseBonusNumber(userBonusNumber);
     }
-
-    private void startSimulation(LottoSimulator simulator) {
-        outputView.displayPurchasedLottos(simulator.getPurchaseCount(), simulator.getPurchasedLottos());
-        Statistics statistics = lottoService.calculateStatistics(simulator);
-        outputView.displayStatistics(statistics);
-    }
 }
-
-/*
-컨트롤러가 최대한 중계 역할만 수행하도록 클래스 분리
-*/
