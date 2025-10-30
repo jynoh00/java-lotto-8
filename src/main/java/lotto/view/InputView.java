@@ -19,7 +19,3 @@ public class InputView {
         return Console.readLine();
     }
 }
-
-/*
-입력 기능만 수행하게 구현 - 단일 책임
- */

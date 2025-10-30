@@ -17,7 +17,7 @@ public class OutputView {
         System.out.println();
     }
 
-    public void displayStatistics (Statistics statistics) {
+    public void displayStatistics(Statistics statistics) {
         System.out.println(OutputMessage.WINNING_STATISTICS.getMessage());
         System.out.println(OutputMessage.MATCH_RESULT.format(
                 3, formatPrize(5_000), statistics.getCountByRank(Rank.FIFTH)));

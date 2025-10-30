@@ -14,7 +14,7 @@ public class WinningNumbersParser {
     }
 
     private static List<Integer> getSplitWinningNumbers(String userWinningNumbers) {
-        String[] numbers = userWinningNumbers.split(","); // 추후 문자열 enum으로 관리
+        String[] numbers = userWinningNumbers.split(",");
         List<Integer> splitWinningNumbers = new ArrayList<>();
 
         for (String number : numbers) {

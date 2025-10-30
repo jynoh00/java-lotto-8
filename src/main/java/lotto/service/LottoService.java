@@ -32,7 +32,7 @@ public class LottoService {
         }
 
         int totalPurchaseAmount = simulator.getPurchaseCount() * LottoConstants.LOTTO_PRICE.getValue();
-        return new Statistics(rankCounts, totalPurchaseAmount); // 미구현
+        return new Statistics(rankCounts, totalPurchaseAmount);
     }
 
     private Rank calculateRank(Lotto lotto, List<Integer> winningNumbers, int bonusNumber) {

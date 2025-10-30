@@ -24,12 +24,12 @@ public class LottoController {
         this.lottoService = new LottoService();
     }
 
-    public void run(){
-        try{
+    public void run() {
+        try {
             purchaseStage();
             setStage();
             statisticStage();
-        }catch(IllegalArgumentException | IllegalStateException e){
+        } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println(e.getMessage());
         }
     }

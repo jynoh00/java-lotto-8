@@ -77,8 +77,7 @@ public enum InputValidator {
     }
 
     protected static void validateFormat(String inputWinningNumbers) {
-        // trim()하고 숫자와 쉼표로만 구성되어있는지 확인
-        if (!inputWinningNumbers.trim().matches("[0-9,\\s]+")) { // 추후 문자열 Enum으로 처리
+        if (!inputWinningNumbers.trim().matches("[0-9,\\s]+")) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_WINNING_NUMBERS_FORMAT.getMessage());
         }
     }

@@ -11,7 +11,6 @@ public enum ErrorMessage {
     DUPLICATE_LOTTO_NUMBER("로또 숫자는 중복되지 않아야 합니다."),
     BONUS_NUMBER_REDUNDANCY("보너스 숫자는 로또 번호와 중복되지 않아야 합니다.");
 
-
     private static final String ERROR_PREFIX = "[ERROR] ";
     private final String message;
 

@@ -6,7 +6,7 @@ public class StringToIntegerConverter {
     public static int convert(String inputNumber) {
         try {
             return Integer.parseInt(inputNumber.trim());
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new IllegalArgumentException(ErrorMessage.INVALID_NUMBER_FORMAT.getMessage());
         }
     }
