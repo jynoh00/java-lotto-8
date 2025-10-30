@@ -30,6 +30,14 @@ public class LottoSimulator {
         return purchaseCount;
     }
 
+    public List<Integer> getWinningNumbers() {
+        return winningNumbers;
+    }
+
+    public int getBonusNumber() {
+        return bonusNumber;
+    }
+
     private void run() {
         makePurchasedLottos();
     }
