@@ -16,9 +16,7 @@ public class Lotto {
         }
     }
 
-    public String getNumbers() {
-        return numbers.toString(); // 미구현
+    public List<Integer> getNumbers() {
+        return numbers;
     }
-
-    // TODO: 추가 기능 구현
 }
