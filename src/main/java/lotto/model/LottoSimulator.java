@@ -1,25 +1,24 @@
 package lotto.model;
 
-import lotto.common.LottoConstants;
-import lotto.service.LottoService;
+import lotto.validator.InputValidator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LottoSimulator {
-    private final LottoService lottoService;
     private final int purchaseCount;
-    private final List<Integer> winningNumbers;
-    private final int bonusNumber;
-    private final List<Lotto> purchasedLottos = new ArrayList<>();
+    private final List<Lotto> purchasedLottos;
+    private List<Integer> winningNumbers;
+    private int bonusNumber;
 
-    public LottoSimulator(int purchaseCount, List<Integer> winningNumbers, int bonusNumber) {
-        this.lottoService = new LottoService();
+    public LottoSimulator(int purchaseCount, List<Lotto> purchasedLottos) {
         this.purchaseCount = purchaseCount;
+        this.purchasedLottos = purchasedLottos;
+    }
+
+    public void setWinningInfo(List<Integer> winningNumbers, int bonusNumber) {
+        InputValidator.BONUS_NUMBER.validateRedundancy(bonusNumber, winningNumbers);
         this.winningNumbers = winningNumbers;
         this.bonusNumber = bonusNumber;
-
-        run();
     }
 
     public List<Lotto> getPurchasedLottos() {
@@ -36,31 +35,5 @@ public class LottoSimulator {
 
     public int getBonusNumber() {
         return bonusNumber;
-    }
-
-    private void run() {
-        makePurchasedLottos();
-    }
-
-    private void makePurchasedLottos() {
-        for (int i = LottoConstants.ZERO.getValue(); i < purchaseCount; i++) {
-            List<Integer> tmpLottoNumbers = lottoService.makeLottoNumbers();
-            if (isDuplicate(tmpLottoNumbers)) {
-                i--;
-                continue;
-            }
-
-            purchasedLottos.add(new Lotto(tmpLottoNumbers));
-        }
-    }
-
-    private boolean isDuplicate(List<Integer> tmpLottoNumbers) {
-        String newLottoNumbers = tmpLottoNumbers.toString();
-
-        for (Lotto lotto : purchasedLottos) {
-            if (lotto.getNumbers().equals(newLottoNumbers)) return true;
-        }
-
-        return false;
     }
 }
