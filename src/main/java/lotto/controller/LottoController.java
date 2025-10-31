@@ -1,5 +1,6 @@
 package lotto.controller;
 
+import camp.nextstep.edu.missionutils.Console;
 import lotto.service.InputService;
 import lotto.service.LottoService;
 import lotto.model.Statistics;
@@ -31,6 +32,9 @@ public class LottoController {
             statisticStage();
         } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println(e.getMessage());
+            throw e;
+        }finally {
+            Console.close();
         }
     }
 
