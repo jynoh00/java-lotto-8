@@ -183,47 +183,135 @@
 
 ---
 
-## 입력값 예시
+## 입력값 예외 처리
 
+### 구매 금액 예외 상황
+- 숫자가 아닌 문자 입력: `abc`, `1a00`
+- 1000원 단위가 아닌 금액: `1500`, `2300`
+- 음수 입력: `-1000`
+- 0원 입력: `0`
+- 숫자 사이에 공백 존재: `10 00`
+
+### 당첨 번호 예외 상황
+- 6개가 아닌 번호 개수: `1,2,3,4,5`, `1,2,3,4,5,6,7`
+- 중복된 번호: `1,2,3,4,5,5`
+- 범위를 벗어난 번호: `0,1,2,3,4,5`, `1,2,3,4,5,46`
+- 잘못된 형식: `1 2 3 4 5 6`, `1-2-3-4-5-6`
+- 개별 숫자 사이 공백 존재: `1,2 0,3,4,5,6`
+
+### 보너스 번호 예외 상황
+- 당첨 번호와 중복: 당첨 번호가 `1,2,3,4,5,6`일 때 보너스 번호 `6`
+- 범위를 벗어난 번호: `0`, `46`
+- 숫자가 아닌 입력: `abc`
+- `null`값 및 단일 공백
 ---
 
 ## 구현 상세
 
----
-
-## 코드 아키텍처
+### 코드 아키텍처
 ```
 └── src
     ├── main
-    │   └── java
-    │       └── lotto
-    │           ├── Application.java
-    │           ├── common
-    │           │   ├── ErrorMessage.java
-    │           │   ├── InputMessage.java
-    │           │   ├── LottoConstants.java
-    │           │   └── OutputMessage.java
-    │           ├── controller
-    │           │   └── LottoController.java
-    │           ├── model
-    │           │   ├── Lotto.java
-    │           │   ├── LottoSimulator.java
-    │           │   └── Statistics.java
-    │           ├── service
-    │           │   ├── InputService.java
-    │           │   └── LottoService.java
-    │           ├── util
-    │           │   ├── StringToIntegerConverter.java
-    │           │   └── WinningNumbersParser.java
-    │           ├── validator
-    │           │   ├── InputValidator.java
-    │           │   └── LottoValidator.java
-    │           └── view
-    │               ├── InputView.java
-    │               └── OutputView.java
+    │   └── java
+    │       └── lotto
+    │           ├── Application.java
+    │           ├── common
+    │           │   ├── ErrorMessage.java
+    │           │   ├── InputMessage.java
+    │           │   ├── LottoConstants.java
+    │           │   └── OutputMessage.java
+    │           ├── controller
+    │           │   └── LottoController.java
+    │           ├── model
+    │           │   ├── Lotto.java
+    │           │   ├── LottoSimulator.java
+    │           │   ├── Rank.java
+    │           │   └── Statistics.java
+    │           ├── service
+    │           │   ├── InputService.java
+    │           │   └── LottoService.java
+    │           ├── util
+    │           │   ├── StringToIntegerConverter.java
+    │           │   └── WinningNumbersParser.java
+    │           ├── validator
+    │           │   ├── InputValidator.java
+    │           │   └── LottoValidator.java
+    │           └── view
+    │               ├── InputView.java
+    │               └── OutputView.java
+    └── test
+        └── java
+            └── lotto
+                ├── ApplicationTest.java
+                ├── controller
+                │   └── LottoControllerTest.java
+                ├── model
+                │   ├── LottoSimulatorTest.java
+                │   ├── LottoTest.java
+                │   ├── RankTest.java
+                │   └── StatisticsTest.java
+                ├── service
+                │   ├── InputServiceTest.java
+                │   └── LottoServiceTest.java
+                ├── util
+                │   ├── StringToIntegerConverterTest.java
+                │   └── WinningNumbersParserTest.java
+                └── validator
+                    ├── InputValidatorTest.java
+                    └── LottoValidatorTest.java
 ```
----
 
-## 사용 기술 스택
+### 계층별 역할
 
+#### Controller
+- `LottoController`: 전체 프로그램 흐름 제어 및 예외 처리
+
+#### Model
+- `Lotto`: 로또 번호 6개를 관리하는 도메인 객체
+- `LottoSimulator`: 구매한 로또들과 당첨 정보를 관리
+- `Rank`: 당첨 등수별 일치 개수, 보너스 일치 여부, 당첨 금액 관리
+- `Statistics`: 당첨 통계 및 수익률 계산
+
+#### Service
+- `InputService`: 사용자 입력값 검증 및 변환
+- `LottoService`: 로또 생성 및 당첨 통계 계산 로직
+
+#### View
+- `InputView`: 사용자 입력
+- `OutputView`: 결과 출력
+
+#### Validator
+- `InputValidator`: 입력값 유효성 검증
+- `LottoValidator`: 로또 번호 유효성 검증
+
+#### Util
+- `StringToIntegerConverter`: 문자열을 정수로 변환
+- `WinningNumbersParser`: 당첨 번호 문자열 파싱
+
+#### Common
+- `ErrorMessage`: 에러 메시지 상수
+- `InputMessage`: 입력 안내 메시지 상수
+- `OutputMessage`: 출력 메시지 상수
+- `LottoConstants`: 로또 관련 상수 (가격, 번호 범위 등)
+
+### 주요 설계 결정
+
+#### 1. 책임 분리
+- Controller는 흐름 제어만 담당
+- View는 입출력만 담당
+- Validator는 검증 로직만 담당
+
+#### 2. 예외 처리 전략
+- 입력 단계 직후 모두 유효성 검사
+- `IllegalArgumentException`으로 통일된 예외 처리
+- [ERROR] 형식을 통한 테스트 코드에서의 의도한 예외 처리 확인
+- Controller에서 예외를 catch하여 에러 메시지 출력
+
+#### 3. 상수 관리
+- 매직 넘버 제거를 위해 Common 패키지에 상수 클래스 분리
+- 메시지 변경 시 한 곳만 수정하면 되도록 구성
+
+#### 4. 테스트 가능성
+- 각 계층별로 단위 테스트 작성
+- NsTest를 활용한 통합 테스트 구현
 ---
