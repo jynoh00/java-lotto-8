@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class LottoService {
     public LottoSimulator createSimulator(int purchasePrice) {
@@ -67,9 +67,10 @@ public class LottoService {
                 LottoConstants.LOTTO_MAX_NUMBER.getValue(),
                 LottoConstants.LOTTO_NUMBERS_LENGTH.getValue()
         );
-        Collections.sort(lottoNumbers);
 
-        return lottoNumbers;
+        return lottoNumbers.stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     private int getPurchaseCount(int purchasePrice) {
