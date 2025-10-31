@@ -12,6 +12,7 @@ import java.util.List;
 class LottoSimulatorTest {
     private List<Lotto> purchasedLottos;
     private int purchaseCount;
+    private static final String ERROR_MESSAGE = "[ERROR]";
 
     @BeforeEach
     void setUp() {
@@ -78,10 +79,10 @@ class LottoSimulatorTest {
     void 보너스_번호_정상_반환() {
         LottoSimulator simulator = new LottoSimulator(purchaseCount, purchasedLottos);
         List<Integer> winningNumbers = List.of(1, 2, 3, 4, 5, 6);
-        int bonusNumber =  7;
+        int bonusNumber = 7;
         simulator.setWinningInfo(winningNumbers, bonusNumber);
 
-        int number =  simulator.getBonusNumber();
+        int number = simulator.getBonusNumber();
 
         assertThat(number).isEqualTo(bonusNumber);
     }
@@ -94,7 +95,7 @@ class LottoSimulatorTest {
         int bonusNumber = 6;
 
         assertThatThrownBy(() -> simulator.setWinningInfo(winningNumbers, bonusNumber))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(IllegalArgumentException.class).hasMessageContaining(ERROR_MESSAGE);
     }
 
     @DisplayName("당첨 번호 설정 전 값 조회 시 null")
@@ -113,7 +114,7 @@ class LottoSimulatorTest {
     void 구매_개수와_로또_목록_크기_일치_확인() {
         int count = 3;
         List<Lotto> lottos = List.of(
-                new Lotto(List.of(1, 2, 3, 4 ,5, 6)),
+                new Lotto(List.of(1, 2, 3, 4, 5, 6)),
                 new Lotto(List.of(7, 8, 9, 10, 11, 12)),
                 new Lotto(List.of(13, 14, 15, 16, 17, 18))
         );
