@@ -32,9 +32,6 @@ public class LottoController {
             statisticStage();
         } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println(e.getMessage());
-            throw e;
-        }finally {
-            Console.close();
         }
     }
 
