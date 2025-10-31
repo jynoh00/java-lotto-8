@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import static camp.nextstep.edu.missionutils.test.Assertions.assertSimpleTest;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class LottoControllerTest extends NsTest {
     private static final String ERROR_MESSAGE = "[ERROR]";
@@ -28,9 +27,8 @@ class LottoControllerTest extends NsTest {
     @Test
     void 형식에_맞지_않는_입력_예외() {
         assertSimpleTest(() -> {
-            assertThatThrownBy(() -> runException("abc"))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining(ERROR_MESSAGE);
+            runException("abc");
+            assertThat(output()).contains(ERROR_MESSAGE);
         });
     }
 
@@ -38,9 +36,8 @@ class LottoControllerTest extends NsTest {
     @Test
     void 천원_단위가_아닌_구매_입력_예외() {
         assertSimpleTest(() -> {
-            assertThatThrownBy(() -> runException("1500"))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining(ERROR_MESSAGE);
+            runException("1500");
+            assertThat(output()).contains(ERROR_MESSAGE);
         });
     }
 
@@ -48,9 +45,8 @@ class LottoControllerTest extends NsTest {
     @Test
     void 잘못된_당첨_번호_개수_입력_예외() {
         assertSimpleTest(() -> {
-            assertThatThrownBy(() -> runException("8000", "1,2,3,4,5"))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining(ERROR_MESSAGE);
+            runException("8000", "1,2,3,4,5");
+            assertThat(output()).contains(ERROR_MESSAGE);
         });
     }
 
@@ -58,9 +54,8 @@ class LottoControllerTest extends NsTest {
     @Test
     void 중복된_당첨_번호_입력_예외() {
         assertSimpleTest(() -> {
-            assertThatThrownBy(() -> runException("8000", "1,2,3,4,5,5"))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining(ERROR_MESSAGE);
+            runException("8000", "1,2,3,4,5,5");
+            assertThat(output()).contains(ERROR_MESSAGE);
         });
     }
 
@@ -68,9 +63,8 @@ class LottoControllerTest extends NsTest {
     @Test
     void 범위를_벗어난_당첨_번호_입력_예외() {
         assertSimpleTest(() -> {
-            assertThatThrownBy(() -> runException("8000", "1,2,3,4,5,46"))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining(ERROR_MESSAGE);
+            runException("8000", "1,2,3,4,5,46");
+            assertThat(output()).contains(ERROR_MESSAGE);
         });
     }
 
@@ -78,9 +72,8 @@ class LottoControllerTest extends NsTest {
     @Test
     void 보너스_번호가_당첨_번호와_중복_시_예외() {
         assertSimpleTest(() -> {
-            assertThatThrownBy(() -> runException("8000", "1,2,3,4,5,6", "6"))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining(ERROR_MESSAGE);
+            runException("8000", "1,2,3,4,5,6", "6");
+            assertThat(output()).contains(ERROR_MESSAGE);
         });
     }
 
@@ -88,9 +81,8 @@ class LottoControllerTest extends NsTest {
     @Test
     void 보너스_번호가_범위를_벗어날_때_예외() {
         assertSimpleTest(() -> {
-            assertThatThrownBy(() -> runException("8000", "1,2,3,4,5,6", "46"))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining(ERROR_MESSAGE);
+            runException("8000", "1,2,3,4,5,6", "46");
+            assertThat(output()).contains(ERROR_MESSAGE);
         });
     }
 
